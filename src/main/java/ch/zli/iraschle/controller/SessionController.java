@@ -6,6 +6,7 @@ import ch.zli.iraschle.util.ApplicationUserDto;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.resteasy.reactive.RestResponse;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/")
+@PermitAll
 public class SessionController {
   @Inject
   SessionService sessionService;

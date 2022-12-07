@@ -3,8 +3,10 @@ package ch.zli.iraschle.controller;
 import ch.zli.iraschle.model.booking.BookingEntity;
 import ch.zli.iraschle.model.booking.BookingState;
 import ch.zli.iraschle.service.BookingService;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -17,9 +19,13 @@ import static ch.zli.iraschle.util.ResponseFactory.createResponse;
 import static javax.ws.rs.core.Response.Status.*;
 
 @Path("/bookings")
+@RolesAllowed({ "ADMINISTRATOR" })
 public class BookingController {
   @Inject
   BookingService bookingService;
+
+  @Inject
+  JsonWebToken jwt;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -50,6 +56,7 @@ public class BookingController {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
+  @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   @Operation(summary = "Create a new booking", description = "Creates a new booking with the submitted data")
   public Response createBooking(@Valid BookingEntity bookingEntity) {
     BookingEntity booking = bookingService.createBooking(bookingEntity);
@@ -60,6 +67,7 @@ public class BookingController {
   @Path("/{id}")
   @Produces
   @Consumes
+  @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   @Operation(summary = "Delete or reverse a booking", description = "The admin user can delete any booking and the member can only reverse his own bookings")
   public void removeBooking(@PathParam("id") long id) {
     bookingService.deleteBooking(id);
@@ -73,10 +81,12 @@ public class BookingController {
     return bookingService.updateBooking(bookingEntity);
   }
 
+  //TODO make sure that the user only can display his own bookings
   @GET
   @Path("/state/{id}")
   @Produces(MediaType.TEXT_PLAIN)
   @Consumes
+  @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   @Operation(summary = "Get the booking state", description = "Get the state of a booking with the given id")
   public String getBookingState(@PathParam("id") long id) {
     return bookingService.getBookingStateOf(id).name();

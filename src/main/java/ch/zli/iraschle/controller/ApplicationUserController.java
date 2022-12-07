@@ -3,8 +3,10 @@ package ch.zli.iraschle.controller;
 import ch.zli.iraschle.util.ApplicationUserDto;
 import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import ch.zli.iraschle.service.ApplicationUserService;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -20,9 +22,13 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.*;
 
 @Path("/users")
+@RolesAllowed({ "ADMINISTRATOR" })
 public class ApplicationUserController {
   @Inject
   ApplicationUserService applicationUserService;
+
+  @Inject
+  JsonWebToken jwt;
 
   @GET
   @Produces(APPLICATION_JSON)
@@ -72,10 +78,13 @@ public class ApplicationUserController {
     return applicationUserService.getApplicationUser(id);
   }
 
+  //TODO assure that ony the user can change his own email and pwd
+  //TODO document this two methods (openapi)
   @PATCH
   @Path("/{id}/email")
   @Produces(APPLICATION_JSON)
   @Consumes(TEXT_PLAIN)
+  @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   public ApplicationUserEntity updateEmail(@PathParam("id") long id, @NotBlank String newEmail) {
     return applicationUserService.changeEmailOfApplicationUser(id, newEmail);
   }
@@ -84,6 +93,7 @@ public class ApplicationUserController {
   @Path("/{id}/password")
   @Produces(APPLICATION_JSON)
   @Consumes(TEXT_PLAIN)
+  @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   public ApplicationUserEntity updatePassword(@PathParam("id") long id, @NotBlank String newPassword) {
     return applicationUserService.changePasswordOfApplicationUser(id, hashPassword(newPassword));
   }
