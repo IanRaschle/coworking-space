@@ -27,7 +27,7 @@ public class ApplicationUserEntity {
     private String lastname;
 
     @NotBlank
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotBlank

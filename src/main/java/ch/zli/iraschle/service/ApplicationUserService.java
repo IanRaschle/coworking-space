@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static ch.zli.iraschle.model.user.Role.ADMINISTRATOR;
 import static ch.zli.iraschle.model.user.Role.MEMBER;
@@ -28,6 +29,15 @@ public class ApplicationUserService {
 
     public ApplicationUserEntity getApplicationUser(long id) {
         return entityManager.find(ApplicationUserEntity.class, id);
+    }
+
+    public Optional<ApplicationUserEntity> getApplicationUserWithCredentials(String email, String password) {
+        return entityManager
+                .createQuery("SELECT u FROM ApplicationUserEntity u WHERE u.email = :email AND u.password = :password", ApplicationUserEntity.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getResultStream()
+                .findFirst();
     }
 
     @Transactional

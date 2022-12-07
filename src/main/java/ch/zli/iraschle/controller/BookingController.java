@@ -33,6 +33,7 @@ public class BookingController {
     return createResponse(OK, bookings);
   }
 
+  //TODO remove all already accepted or denied bookings from response
   @GET
   @Path("/sorted")
   @Produces(MediaType.APPLICATION_JSON)

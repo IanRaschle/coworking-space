@@ -26,6 +26,7 @@ public class PasswortHashing {
         return Hex.encodeHexString(hashedBytes);
     }
 
+    //TODO link to code
     private static byte[] hashPassword(final char[] password, final byte[] salt, final int iterations, final int keyLength) {
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
