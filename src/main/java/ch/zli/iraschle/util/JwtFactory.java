@@ -15,4 +15,12 @@ public class JwtFactory {
                 .expiresIn(Duration.ofHours(12))
                 .sign();
     }
+
+    public static String createJwt(String email, Role role, Duration expiresIn) {
+        return Jwt.issuer("https://coworking-space.project.ch")
+                .upn(email)
+                .groups(new HashSet<>(List.of(role.name())))
+                .expiresIn(expiresIn)
+                .sign();
+    }
 }

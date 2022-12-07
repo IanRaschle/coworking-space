@@ -1,17 +1,22 @@
 package ch.zli.iraschle.controller;
 
+import ch.zli.iraschle.service.SessionService;
 import ch.zli.iraschle.util.ApplicationUserDto;
 import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import ch.zli.iraschle.service.ApplicationUserService;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.Collections;
 import java.util.List;
 
 import static ch.zli.iraschle.util.PasswortHashing.hashPassword;
@@ -26,6 +31,9 @@ import static javax.ws.rs.core.Response.Status.*;
 public class ApplicationUserController {
   @Inject
   ApplicationUserService applicationUserService;
+
+  @Inject
+  SessionService sessionService;
 
   @Inject
   JsonWebToken jwt;
@@ -78,15 +86,18 @@ public class ApplicationUserController {
     return applicationUserService.getApplicationUser(id);
   }
 
-  //TODO assure that ony the user can change his own email and pwd
   @PATCH
   @Path("/change/email")
   @Produces(APPLICATION_JSON)
   @Consumes(TEXT_PLAIN)
   @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
   @Operation(summary = "Update the email", description = "Update the email of the logged id account")
-  public ApplicationUserEntity updateEmail(@NotBlank String newEmail) {
-    return applicationUserService.changeEmailOfApplicationUser(jwt.getClaim("upn"), newEmail);
+  public Response updateEmail(@NotBlank String newEmail) {
+    ApplicationUserEntity applicationUser = applicationUserService.changeEmailOfApplicationUser(jwt.getClaim("upn"), newEmail);
+    String token = sessionService.updateJwt(jwt, applicationUser);
+    return RestResponse.ResponseBuilder.ok(applicationUser, MediaType.APPLICATION_JSON)
+            .header("Authorization", token)
+            .build().toResponse();
   }
 
   @PATCH

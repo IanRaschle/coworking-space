@@ -8,6 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +41,17 @@ public class ApplicationUserService {
                 .findFirst();
     }
 
-    public Optional<ApplicationUserEntity> getApplicationUserWithEmail(String email) {
-        return entityManager
+    public ApplicationUserEntity getApplicationUserWithEmail(String email) {
+        //TODO error handling
+        ApplicationUserEntity applicationUser = entityManager
                 .createQuery("SELECT u FROM ApplicationUserEntity u WHERE u.email = :email", ApplicationUserEntity.class)
                 .setParameter("email", email)
                 .getResultStream()
-                .findFirst();
+                .findFirst().get();
+        if (applicationUser.getBookings() == null) {
+            applicationUser.setBookings(Collections.emptySet());
+        }
+        return applicationUser;
     }
 
     @Transactional
@@ -77,16 +83,18 @@ public class ApplicationUserService {
 
     @Transactional
     public ApplicationUserEntity changeEmailOfApplicationUser(String email, String newEmail) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email);
         applicationUser.setEmail(newEmail);
-        return entityManager.merge(applicationUser);
+        entityManager.merge(applicationUser);
+        return applicationUser;
     }
 
     @Transactional
     public ApplicationUserEntity changePasswordOfApplicationUser(String email, String newPassword) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email);
         applicationUser.setPassword(newPassword);
-        return entityManager.merge(applicationUser);
+        entityManager.merge(applicationUser);
+        return applicationUser;
     }
 
     private void addRoleToApplicationUser(ApplicationUserEntity applicationUser) {

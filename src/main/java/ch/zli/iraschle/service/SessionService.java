@@ -3,6 +3,7 @@ package ch.zli.iraschle.service;
 import ch.zli.iraschle.model.session.Credentials;
 import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import ch.zli.iraschle.util.JwtFactory;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,6 +28,11 @@ public class SessionService {
             throw INVALID_CREDENTIALS;
         }
         ApplicationUserEntity applicationUser = optionalApplicationUser.get();
+        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
+    }
+
+    //TODO change jwt update -> expiration time to remaining time
+    public String updateJwt(JsonWebToken jwt, ApplicationUserEntity applicationUser) {
         return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
     }
 }
