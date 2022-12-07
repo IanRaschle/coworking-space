@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @ApplicationScoped
-public class BookingsService {
+public class BookingService {
     @Inject
     EntityManager entityManager;
 
