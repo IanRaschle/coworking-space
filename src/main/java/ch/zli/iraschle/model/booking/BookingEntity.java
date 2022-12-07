@@ -1,10 +1,10 @@
 package ch.zli.iraschle.model.booking;
 
 import ch.zli.iraschle.model.user.ApplicationUser;
-import io.smallrye.common.constraint.NotNull;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,24 +13,24 @@ import java.time.LocalDate;
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     @Schema(readOnly = true)
     private long id;
 
-    @Column(name = "date", nullable = false)
+    @Column(nullable = false)
     @NotNull
     private LocalDate date;
 
-    @Column(name = "duration", nullable = false)
+    @Column(nullable = false)
     @NotNull
     private BookingDuration duration;
 
     @ManyToOne
-    @NotNull
+    //@NotNull
     @Fetch(FetchMode.JOIN)
     private ApplicationUser applicationUser;
 
-    @Column(name = "state", nullable = false)
+    @Column(nullable = false)
     @NotNull
     private BookingState state;
 
