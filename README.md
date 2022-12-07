@@ -11,7 +11,9 @@
 * Role VISITOR
   * Planned: There should be a Role for a visitor
   * Implementation: This Role is unnecessary because a visitor is never stored in the DB, so I haven't implemented it
-
+* Change Email or Password endpoint
+  * Planned: I've planed to submit the id of the User whose email or password should be changed in the path
+  * Implemented: To assure that everyone only can change his own email or password it's easier to extract the email from the Jwt. With this way the user only can change his data if he's logged in
 
 
 ## Testing

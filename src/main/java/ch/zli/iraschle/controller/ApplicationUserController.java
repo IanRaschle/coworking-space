@@ -79,22 +79,23 @@ public class ApplicationUserController {
   }
 
   //TODO assure that ony the user can change his own email and pwd
-  //TODO document this two methods (openapi)
   @PATCH
-  @Path("/{id}/email")
+  @Path("/change/email")
   @Produces(APPLICATION_JSON)
   @Consumes(TEXT_PLAIN)
   @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
-  public ApplicationUserEntity updateEmail(@PathParam("id") long id, @NotBlank String newEmail) {
-    return applicationUserService.changeEmailOfApplicationUser(id, newEmail);
+  @Operation(summary = "Update the email", description = "Update the email of the logged id account")
+  public ApplicationUserEntity updateEmail(@NotBlank String newEmail) {
+    return applicationUserService.changeEmailOfApplicationUser(jwt.getClaim("upn"), newEmail);
   }
 
   @PATCH
-  @Path("/{id}/password")
+  @Path("/change/password")
   @Produces(APPLICATION_JSON)
   @Consumes(TEXT_PLAIN)
   @RolesAllowed({ "ADMINISTRATOR", "MEMBER" })
-  public ApplicationUserEntity updatePassword(@PathParam("id") long id, @NotBlank String newPassword) {
-    return applicationUserService.changePasswordOfApplicationUser(id, hashPassword(newPassword));
+  @Operation(summary = "Update the password", description = "Update the password of the logged id account")
+  public ApplicationUserEntity updatePassword(@NotBlank String newPassword) {
+    return applicationUserService.changePasswordOfApplicationUser(jwt.getClaim("upn"), hashPassword(newPassword));
   }
 }

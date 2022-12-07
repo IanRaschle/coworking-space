@@ -40,6 +40,14 @@ public class ApplicationUserService {
                 .findFirst();
     }
 
+    public Optional<ApplicationUserEntity> getApplicationUserWithEmail(String email) {
+        return entityManager
+                .createQuery("SELECT u FROM ApplicationUserEntity u WHERE u.email = :email", ApplicationUserEntity.class)
+                .setParameter("email", email)
+                .getResultStream()
+                .findFirst();
+    }
+
     @Transactional
     public ApplicationUserEntity createApplicationUser(ApplicationUserEntity applicationUser) {
         if (!administratorManager.adminExists()) {
@@ -64,24 +72,21 @@ public class ApplicationUserService {
     @Transactional
     public ApplicationUserEntity updateApplicationUser(ApplicationUserEntity applicationUser) {
         addRoleToApplicationUser(applicationUser);
-        entityManager.merge(applicationUser);
-        return applicationUser;
+        return entityManager.merge(applicationUser);
     }
 
     @Transactional
-    public ApplicationUserEntity changeEmailOfApplicationUser(long id, String newEmail) {
-        ApplicationUserEntity applicationUser = getApplicationUser(id);
+    public ApplicationUserEntity changeEmailOfApplicationUser(String email, String newEmail) {
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setEmail(newEmail);
-        entityManager.merge(applicationUser);
-        return applicationUser;
+        return entityManager.merge(applicationUser);
     }
 
     @Transactional
-    public ApplicationUserEntity changePasswordOfApplicationUser(long id, String newPassword) {
-        ApplicationUserEntity applicationUser = getApplicationUser(id);
+    public ApplicationUserEntity changePasswordOfApplicationUser(String email, String newPassword) {
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setPassword(newPassword);
-        entityManager.merge(applicationUser);
-        return applicationUser;
+        return entityManager.merge(applicationUser);
     }
 
     private void addRoleToApplicationUser(ApplicationUserEntity applicationUser) {
