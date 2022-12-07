@@ -1,6 +1,6 @@
 package ch.zli.iraschle.model.booking;
 
-import ch.zli.iraschle.model.user.ApplicationUser;
+import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -26,9 +26,9 @@ public class BookingEntity {
     private BookingDuration duration;
 
     @ManyToOne
-    //@NotNull
+    @NotNull
     @Fetch(FetchMode.JOIN)
-    private ApplicationUser applicationUser;
+    private ApplicationUserEntity applicationUser;
 
     @Column(nullable = false)
     @NotNull
@@ -36,14 +36,14 @@ public class BookingEntity {
 
     public BookingEntity() {}
 
-    public BookingEntity(LocalDate date, BookingDuration duration, ApplicationUser applicationUser, BookingState state) {
+    public BookingEntity(LocalDate date, BookingDuration duration, ApplicationUserEntity applicationUser, BookingState state) {
         this.date = date;
         this.duration = duration;
         this.applicationUser = applicationUser;
         this.state = state;
     }
 
-    public BookingEntity(long id, LocalDate date, BookingDuration duration, ApplicationUser applicationUser, BookingState state) {
+    public BookingEntity(long id, LocalDate date, BookingDuration duration, ApplicationUserEntity applicationUser, BookingState state) {
         this.id = id;
         this.date = date;
         this.duration = duration;
@@ -75,11 +75,11 @@ public class BookingEntity {
         this.duration = duration;
     }
 
-    public ApplicationUser getApplicationUser() {
+    public ApplicationUserEntity getApplicationUser() {
         return applicationUser;
     }
 
-    public void setApplicationUser(ApplicationUser applicationUser) {
+    public void setApplicationUser(ApplicationUserEntity applicationUser) {
         this.applicationUser = applicationUser;
     }
 

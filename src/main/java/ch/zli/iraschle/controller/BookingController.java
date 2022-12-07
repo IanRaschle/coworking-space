@@ -12,10 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static ch.zli.iraschle.controller.util.ResponseFactory.NO_CONTENT;
-import static ch.zli.iraschle.controller.util.ResponseFactory.createResponse;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
-import static javax.ws.rs.core.Response.Status.CREATED;
+import static ch.zli.iraschle.util.ResponseFactory.NO_CONTENT;
+import static ch.zli.iraschle.util.ResponseFactory.createResponse;
+import static javax.ws.rs.core.Response.Status.*;
 
 @Path("/bookings")
 public class BookingController {
@@ -31,7 +30,7 @@ public class BookingController {
     if (bookings.isEmpty()) {
       return NO_CONTENT;
     }
-    return createResponse(ACCEPTED, bookings);
+    return createResponse(OK, bookings);
   }
 
   @GET
@@ -44,7 +43,7 @@ public class BookingController {
     if (bookingsSorted.isEmpty()) {
       return NO_CONTENT;
     }
-    return createResponse(ACCEPTED, bookingsSorted);
+    return createResponse(OK, bookingsSorted);
   }
 
   @POST
