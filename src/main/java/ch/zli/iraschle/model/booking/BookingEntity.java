@@ -26,7 +26,6 @@ public class BookingEntity {
     private BookingDuration duration;
 
     @ManyToOne
-    @NotNull
     @Fetch(FetchMode.JOIN)
     private ApplicationUserEntity applicationUser;
 
