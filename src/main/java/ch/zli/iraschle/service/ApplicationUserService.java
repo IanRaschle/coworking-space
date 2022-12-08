@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,20 +83,32 @@ public class ApplicationUserService {
 
     @Transactional
     public ApplicationUserEntity updateApplicationUser(ApplicationUserEntity applicationUser) {
+        ApplicationUserEntity oldApplicationUser = getApplicationUser(applicationUser.getId());
+        if (oldApplicationUser == null) {
+            throw WebApplicationExceptionFactory.NO_USER_WITH_ID;
+        }
         addRoleToApplicationUser(applicationUser);
         return entityManager.merge(applicationUser);
     }
 
     @Transactional
     public void changeEmailOfApplicationUser(String email, String newEmail) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
+        Optional<ApplicationUserEntity> applicationUserWithEmail = getApplicationUserWithEmail(email);
+        if (applicationUserWithEmail.isEmpty()) {
+            throw WebApplicationExceptionFactory.NO_USER_WITH_EMAIL;
+        }
+        ApplicationUserEntity applicationUser = applicationUserWithEmail.get();
         applicationUser.setEmail(newEmail);
         entityManager.merge(applicationUser);
     }
 
     @Transactional
     public void changePasswordOfApplicationUser(String email, String newPassword) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
+        Optional<ApplicationUserEntity> applicationUserWithEmail = getApplicationUserWithEmail(email);
+        if (applicationUserWithEmail.isEmpty()) {
+            throw WebApplicationExceptionFactory.NO_USER_WITH_EMAIL;
+        }
+        ApplicationUserEntity applicationUser = applicationUserWithEmail.get();
         applicationUser.setPassword(newPassword);
         entityManager.merge(applicationUser);
     }
