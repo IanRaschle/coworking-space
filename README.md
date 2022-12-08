@@ -17,6 +17,9 @@
 * Response Codes Of update Booking
   * Planned: I've had planed that this endpoint has 3 response codes but forgot to add one if the submitted booking is invalid
   * Implemented: I implemented that mentioned Response
+* Update ApplicationUser
+  * Planned: I set the method of this endpoint to POST
+  * Implemented: Because PUT ist the correct method for this type of endpoint I implemented ith with the PUT method
 
 ## Testing
 ### Test Data
