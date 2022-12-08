@@ -14,7 +14,9 @@
 * Change Email or Password endpoint
   * Planned: I've planed to submit the id of the User whose email or password should be changed in the path
   * Implemented: To assure that everyone only can change his own email or password it's easier to extract the email from the Jwt. With this way the user only can change his data if he's logged in
-
+* Response Codes Of update Booking
+  * Planned: I've had planed that this endpoint has 3 response codes but forgot to add one if the submitted booking is invalid
+  * Implemented: I implemented that mentioned Response
 
 ## Testing
 ### Test Data

@@ -31,21 +31,9 @@ public class TestDataService {
         entityManager.createNativeQuery("TRUNCATE TABLE applicationuserentity RESTART IDENTITY").executeUpdate();
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 
-        ApplicationUserEntity hans = new ApplicationUserEntity();
-        hans.setFirstname("Hans-ueli");
-        hans.setLastname("Bra");
-        hans.setEmail("hans.bra@gmail.com");
-        hans.setPassword(hashPassword("admin"));
-        hans.setBookings(Collections.emptySet());
-        hans.setRole(Role.ADMINISTRATOR);
+        ApplicationUserEntity hans = getTestAdmin();
 
-        ApplicationUserEntity jonas = new ApplicationUserEntity();
-        jonas.setFirstname("Jonas");
-        jonas.setLastname("Lukas");
-        jonas.setEmail("jonas.lukas@gmail.com");
-        jonas.setPassword(hashPassword("chronist"));
-        jonas.setBookings(Collections.emptySet());
-        jonas.setRole(Role.MEMBER);
+        ApplicationUserEntity jonas = getTestMember();
 
         BookingEntity booking1 = new BookingEntity();
         booking1.setDate(LocalDate.of(2022, 12, 1));
@@ -78,5 +66,27 @@ public class TestDataService {
         entityManager.persist(booking2);
         entityManager.persist(booking3);
         entityManager.persist(booking4);
+    }
+
+    public ApplicationUserEntity getTestAdmin() {
+        ApplicationUserEntity applicationUser = new ApplicationUserEntity();
+        applicationUser.setFirstname("Hans-ueli");
+        applicationUser.setLastname("Bra");
+        applicationUser.setEmail("hans.bra@gmail.com");
+        applicationUser.setPassword(hashPassword("admin"));
+        applicationUser.setBookings(Collections.emptySet());
+        applicationUser.setRole(Role.ADMINISTRATOR);
+        return applicationUser;
+    }
+
+    public ApplicationUserEntity getTestMember() {
+        ApplicationUserEntity applicationUser = new ApplicationUserEntity();
+        applicationUser.setFirstname("Jonas");
+        applicationUser.setLastname("Lukas");
+        applicationUser.setEmail("jonas.lukas@gmail.com");
+        applicationUser.setPassword(hashPassword("chronist"));
+        applicationUser.setBookings(Collections.emptySet());
+        applicationUser.setRole(Role.MEMBER);
+        return applicationUser;
     }
 }
