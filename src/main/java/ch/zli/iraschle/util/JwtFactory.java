@@ -12,7 +12,7 @@ public class JwtFactory {
         return Jwt.issuer("https://coworking-space.project.ch")
                 .upn(email)
                 .groups(new HashSet<>(List.of(role)))
-                .expiresIn(Duration.ofHours(12))
+                .expiresIn(Duration.ofHours(24))
                 .sign();
     }
 
