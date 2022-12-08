@@ -26,10 +26,10 @@ public class TestDataService {
 
     @Transactional
     public void loadTestData(@Observes StartupEvent startupEvent) {
-        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE");
-        entityManager.createNativeQuery("TRUNCATE TABLE bookingentity RESTART IDENTITY");
-        entityManager.createNativeQuery("TRUNCATE TABLE applicationuserentity RESTART IDENTITY");
-        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE");
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE bookingentity RESTART IDENTITY").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE applicationuserentity RESTART IDENTITY").executeUpdate();
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 
         ApplicationUserEntity hans = new ApplicationUserEntity();
         hans.setFirstname("Hans-ueli");
