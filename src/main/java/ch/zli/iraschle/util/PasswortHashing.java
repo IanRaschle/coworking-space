@@ -26,7 +26,7 @@ public class PasswortHashing {
         return Hex.encodeHexString(hashedBytes);
     }
 
-    //TODO link to code
+    /**This code is copied from https://medium.com/@kasunpdh/how-to-store-passwords-securely-with-pbkdf2-204487f14e84 and slightly changed*/
     private static byte[] hashPassword(final char[] password, final byte[] salt, final int iterations, final int keyLength) {
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
@@ -35,7 +35,6 @@ public class PasswortHashing {
             return key.getEncoded( );
         } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
             throw new RuntimeException( e );
-            //TODO maybe create exception for this specific error
         }
     }
 }
