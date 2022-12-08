@@ -1,5 +1,6 @@
 # Coworking Space
-
+This Application is a prototype for an API of a coworking space. It implements all the planed requirements and the Api is constructed as planed in the interface planing.
+If there are any differences between the planning and the implementation I've documented them at API Differences with planing.
 ## API
 ### Differences with planing
 * Update booking endpoint
@@ -21,13 +22,40 @@
   * Planned: I set the method of this endpoint to POST
   * Implemented: Because PUT ist the correct method for this type of endpoint I implemented ith with the PUT method
 
-## Testing
-### Test Data
+# Set up
+Clone this git repo, install Visual Studio code and open this project in VS code. There are some extensions you have to download. These Extensions are DevContainers and Java Pack Extension.
+Reopen the project in the Dev Container and assure that the Java and Quarkus extensions are installed.
+
+## Start / Test
+### General information
+To be able to start/test this project you have to generate the keys for the jwt. https://quarkus.io/guides/security-jwt. This is only the case if you clone the repo, cause these keas are in the .gitignore.
+To Debug the project you can run Quarkus debug current project or to test the project you can just run the tests in the folder test.java.ch.zli.iraschle
+
+### Testing
+#### Test Data
+##### User
 `
 {
-"firstname": "ian",
-"lastname": "raschle",
-"email": "ian.raschle@gmail.com",
+"firstname": "hans-ueli",
+"lastname": "bra",
+"email": "hans.bra@gmail.com",
 "password": "admin"
+}
+`
+
+##### Booking
+`
+{
+"date": "2022-12-12",
+"duration": "FULLDAY",
+"state": "PENDING",
+"applicationUser": {
+"id": {id},
+"firstname": "{firstname}",
+"lastname": "{latsname}}",
+"email": "{email}",
+"password": "{password}",
+"role": "{role}"
+}
 }
 `
