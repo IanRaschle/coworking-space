@@ -41,17 +41,13 @@ public class ApplicationUserService {
                 .findFirst();
     }
 
-    public ApplicationUserEntity getApplicationUserWithEmail(String email) {
+    public Optional<ApplicationUserEntity> getApplicationUserWithEmail(String email) {
         //TODO error handling
-        ApplicationUserEntity applicationUser = entityManager
+        return entityManager
                 .createQuery("SELECT u FROM ApplicationUserEntity u WHERE u.email = :email", ApplicationUserEntity.class)
                 .setParameter("email", email)
                 .getResultStream()
-                .findFirst().get();
-        if (applicationUser.getBookings() == null) {
-            applicationUser.setBookings(Collections.emptySet());
-        }
-        return applicationUser;
+                .findFirst();
     }
 
     @Transactional
@@ -83,7 +79,7 @@ public class ApplicationUserService {
 
     @Transactional
     public ApplicationUserEntity changeEmailOfApplicationUser(String email, String newEmail) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email);
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setEmail(newEmail);
         entityManager.merge(applicationUser);
         return applicationUser;
@@ -91,7 +87,7 @@ public class ApplicationUserService {
 
     @Transactional
     public ApplicationUserEntity changePasswordOfApplicationUser(String email, String newPassword) {
-        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email);
+        ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setPassword(newPassword);
         entityManager.merge(applicationUser);
         return applicationUser;

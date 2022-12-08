@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static ch.zli.iraschle.util.WebApplicationExceptionFactory.*;
@@ -43,14 +44,15 @@ public class BookingService {
 
     @Transactional
     public BookingEntity createBooking(BookingEntity bookingEntity, String email) {
-        ApplicationUserEntity applicationUserWithEmail = applicationUserService.getApplicationUserWithEmail(email);
-        if (applicationUserWithEmail == null) {
+        Optional<ApplicationUserEntity> applicationUserWithEmail = applicationUserService.getApplicationUserWithEmail(email);
+        if (applicationUserWithEmail.isEmpty()) {
             throw NO_USER_WITH_ID;
         }
-        bookingEntity.setApplicationUser(applicationUserWithEmail);
-        Set<BookingEntity> bookings = applicationUserWithEmail.getBookings();
+        ApplicationUserEntity applicationUser = applicationUserWithEmail.get();
+        bookingEntity.setApplicationUser(applicationUser);
+        Set<BookingEntity> bookings = applicationUser.getBookings();
         bookings.add(bookingEntity);
-        applicationUserWithEmail.setBookings(bookings);
+        applicationUser.setBookings(bookings);
         entityManager.persist(bookingEntity);
         return bookingEntity;
     }

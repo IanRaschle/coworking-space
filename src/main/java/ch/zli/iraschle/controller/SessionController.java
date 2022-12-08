@@ -26,7 +26,7 @@ public class SessionController {
   @Produces(APPLICATION_JSON)
   @Consumes(APPLICATION_JSON)
   @Operation(summary = "Create new Account", description = "Create a new Account (ApplicationUser) with the given data")
-  public Response getApplicationUsers(ApplicationUserDto applicationUserDto) {
+  public Response getApplicationUsers(@Valid ApplicationUserDto applicationUserDto) {
     String token = sessionService.sign_up(applicationUserDto.toNewApplicationUser());
     return RestResponse.ResponseBuilder.ok("", MediaType.APPLICATION_JSON)
             .header("Authorization", token)

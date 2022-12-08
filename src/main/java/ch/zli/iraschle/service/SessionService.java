@@ -3,6 +3,7 @@ package ch.zli.iraschle.service;
 import ch.zli.iraschle.model.session.Credentials;
 import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import ch.zli.iraschle.util.JwtFactory;
+import ch.zli.iraschle.util.WebApplicationExceptionFactory;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,6 +19,10 @@ public class SessionService {
     ApplicationUserService applicationUserService;
 
     public String sign_up(ApplicationUserEntity applicationUser) {
+        Optional<ApplicationUserEntity> applicationUserWithEmail = applicationUserService.getApplicationUserWithEmail(applicationUser.getEmail());
+        if (applicationUserWithEmail.isPresent()) {
+            throw WebApplicationExceptionFactory.DUPLICATED_EMAIL;
+        }
         applicationUserService.createApplicationUser(applicationUser);
         return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
     }
