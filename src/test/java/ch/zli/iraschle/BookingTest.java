@@ -54,8 +54,9 @@ public class BookingTest {
             @Claim(key = "upn", value = "hans.bar@gmail.com")
     })
     void testGetBookingsSortedWithAdminRights() {
+        testDataService.loadTestDataWithRelativeDate();
         given().when().get("/bookings/sorted").then()
-                .statusCode(200).and().body("size()", is(4));
+                .statusCode(200).and().body("size()", is(2));
     }
 
     @Test

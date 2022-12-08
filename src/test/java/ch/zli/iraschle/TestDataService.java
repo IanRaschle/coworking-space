@@ -68,6 +68,57 @@ public class TestDataService {
         entityManager.persist(booking4);
     }
 
+    @Transactional
+    public void loadTestDataWithRelativeDate() {
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE bookingentity RESTART IDENTITY").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE applicationuserentity RESTART IDENTITY").executeUpdate();
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+
+        ApplicationUserEntity hans = getTestAdmin();
+
+        ApplicationUserEntity jonas = getTestMember();
+
+        BookingEntity booking1 = new BookingEntity();
+        booking1.setDate(LocalDate.now().plusDays(1));
+        booking1.setState(BookingState.ACCEPTED);
+        booking1.setDuration(BookingDuration.FULLDAY);
+        booking1.setApplicationUser(hans);
+
+        BookingEntity booking2 = new BookingEntity();
+        booking2.setDate(LocalDate.now().plusDays(10));
+        booking2.setState(BookingState.PENDING);
+        booking2.setDuration(BookingDuration.MORNING);
+        booking2.setApplicationUser(hans);
+
+        BookingEntity booking3 = new BookingEntity();
+        booking3.setDate(LocalDate.now());
+        booking3.setState(BookingState.PENDING);
+        booking3.setDuration(BookingDuration.AFTERNOON);
+        booking3.setApplicationUser(jonas);
+
+        BookingEntity booking4 = new BookingEntity();
+        booking4.setDate(LocalDate.now());
+        booking4.setState(BookingState.DENIED);
+        booking4.setDuration(BookingDuration.FULLDAY);
+        booking4.setApplicationUser(jonas);
+
+        BookingEntity booking5 = new BookingEntity();
+        booking5.setDate(LocalDate.now().minusDays(1));
+        booking5.setState(BookingState.PENDING);
+        booking5.setDuration(BookingDuration.AFTERNOON);
+        booking5.setApplicationUser(jonas);
+
+        entityManager.persist(hans);
+        entityManager.persist(jonas);
+
+        entityManager.persist(booking1);
+        entityManager.persist(booking2);
+        entityManager.persist(booking3);
+        entityManager.persist(booking4);
+        entityManager.persist(booking5);
+    }
+
     public ApplicationUserEntity getTestAdmin() {
         ApplicationUserEntity applicationUser = new ApplicationUserEntity();
         applicationUser.setFirstname("Hans-ueli");
