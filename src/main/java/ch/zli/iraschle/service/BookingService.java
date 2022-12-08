@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,9 @@ public class BookingService {
 
     public List<BookingEntity> getBookingsSorted() {
         List<BookingEntity> bookings = getBookings();
-        return bookings.stream().sorted(Comparator.comparing(BookingEntity::getDate)).toList();
+        return bookings.stream().sorted(Comparator.comparing(BookingEntity::getDate)).filter(it ->
+                it.getState() == BookingState.PENDING && !it.getDate().isBefore(LocalDate.now())
+        ).toList();
     }
 
     public BookingEntity getBooking(long id) {
