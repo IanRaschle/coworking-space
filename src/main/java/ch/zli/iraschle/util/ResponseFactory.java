@@ -8,6 +8,7 @@ import static javax.ws.rs.core.Response.Status.*;
 
 public class ResponseFactory {
     public static final Response NO_CONTENT = Response.status(Status.NO_CONTENT).build();
+    public static final Response OK = Response.status(Status.OK).build();
 
     public static final Response APPLICATION_USER_ID_NOT_EXISTING = Response.status(BAD_REQUEST).entity("There is no ApplicationUser with this id").build();
     public static final Response APPLICATION_USER_EMAIL_NOT_EXISTING = Response.status(BAD_REQUEST).entity("There is no ApplicationUser with this email").build();

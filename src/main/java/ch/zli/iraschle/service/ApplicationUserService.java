@@ -3,6 +3,7 @@ package ch.zli.iraschle.service;
 import ch.zli.iraschle.model.user.ApplicationUserEntity;
 import ch.zli.iraschle.model.user.Role;
 import ch.zli.iraschle.util.AdministratorManager;
+import ch.zli.iraschle.util.WebApplicationExceptionFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -65,10 +66,20 @@ public class ApplicationUserService {
     @Transactional
     public void deleteApplicationUser(Long id) {
         ApplicationUserEntity applicationUser = getApplicationUser(id);
+        if (applicationUser == null) {
+            throw WebApplicationExceptionFactory.NO_USER_WITH_ID;
+        }
         if (getRoleOfApplicationUser(id) == ADMINISTRATOR) {
             administratorManager.submitAdminRemoval();
         }
-        entityManager.remove(applicationUser);
+        entityManager
+                .createQuery("DELETE FROM BookingEntity b WHERE b.applicationUser.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+        entityManager
+                .createQuery("DELETE FROM ApplicationUserEntity u WHERE u.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
     @Transactional
@@ -78,19 +89,17 @@ public class ApplicationUserService {
     }
 
     @Transactional
-    public ApplicationUserEntity changeEmailOfApplicationUser(String email, String newEmail) {
+    public void changeEmailOfApplicationUser(String email, String newEmail) {
         ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setEmail(newEmail);
         entityManager.merge(applicationUser);
-        return applicationUser;
     }
 
     @Transactional
-    public ApplicationUserEntity changePasswordOfApplicationUser(String email, String newPassword) {
+    public void changePasswordOfApplicationUser(String email, String newPassword) {
         ApplicationUserEntity applicationUser = getApplicationUserWithEmail(email).get();
         applicationUser.setPassword(newPassword);
         entityManager.merge(applicationUser);
-        return applicationUser;
     }
 
     private void addRoleToApplicationUser(ApplicationUserEntity applicationUser) {

@@ -24,7 +24,7 @@ public class SessionService {
             throw WebApplicationExceptionFactory.DUPLICATED_EMAIL;
         }
         applicationUserService.createApplicationUser(applicationUser);
-        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
+        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole().name());
     }
 
     public String sign_in(Credentials credentials) {
@@ -33,11 +33,6 @@ public class SessionService {
             throw INVALID_CREDENTIALS;
         }
         ApplicationUserEntity applicationUser = optionalApplicationUser.get();
-        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
-    }
-
-    //TODO change jwt update -> expiration time to remaining time
-    public String updateJwt(JsonWebToken jwt, ApplicationUserEntity applicationUser) {
-        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole());
+        return JwtFactory.createJwt(applicationUser.getEmail(), applicationUser.getRole().name());
     }
 }

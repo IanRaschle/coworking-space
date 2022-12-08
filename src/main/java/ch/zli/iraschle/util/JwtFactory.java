@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public class JwtFactory {
-    public static String createJwt(String email, Role role) {
+    public static String createJwt(String email, String role) {
         return Jwt.issuer("https://coworking-space.project.ch")
                 .upn(email)
-                .groups(new HashSet<>(List.of(role.name())))
+                .groups(new HashSet<>(List.of(role)))
                 .expiresIn(Duration.ofHours(12))
                 .sign();
     }
